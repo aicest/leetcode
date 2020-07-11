@@ -7,14 +7,23 @@
 # @lc code=start
 class Solution:
     def lengthOfLIS(self, nums):
-        return self.dfs(nums, 0, len(nums) - 1, [])
+        if not nums:
+            return 0
 
-    def dfs(self, nums, start, end, path, root=None):
-        best = len(path)
-        for i in range(start, end + 1):
-            child = nums[i]
-            if root == None or root < child:
-                best = max(best, self.dfs(nums, i + 1, end, path + [child], child))
+        dp = {1: nums[0]}
+        best = 1
+        for i in range(1, len(nums)):
+            x = nums[i]
+            dp[1] = min(dp[1], x)
+            for n in range(best, 0, -1):
+                if dp[n] < x:
+                    if n + 1 not in dp:
+                        dp[n + 1] = x
+                        best = n + 1
+                        break
+                    else:
+                        dp[n + 1] = min(dp[n + 1], x)
+                        break
         return best
 
 
@@ -25,4 +34,6 @@ if __name__ == "__main__":
     print(Solution().lengthOfLIS([10]))
     print(Solution().lengthOfLIS([10, 10, 10]))
     print(Solution().lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
-    print(Solution().lengthOfLIS(range(23)))  # 回溯法 => 超时
+    print(Solution().lengthOfLIS(range(2500)))  # 回溯法 => 超时
+    print(Solution().lengthOfLIS([1, 9, 10, 6, 7, 8, 2, 3, 4, 5]))
+    print(Solution().lengthOfLIS([10, 11, 9, 10, 6, 7, 8]))
