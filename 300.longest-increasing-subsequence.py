@@ -10,21 +10,27 @@ class Solution:
         if not nums:
             return 0
 
-        dp = {1: nums[0]}
-        best = 1
+        dp = [nums[0]]
         for i in range(1, len(nums)):
             x = nums[i]
-            dp[1] = min(dp[1], x)
-            for n in range(best, 0, -1):
-                if dp[n] < x:
-                    if n + 1 not in dp:
-                        dp[n + 1] = x
-                        best = n + 1
-                        break
-                    else:
-                        dp[n + 1] = min(dp[n + 1], x)
-                        break
-        return best
+            dp[0] = min(dp[0], x)
+            n = self.bs(dp, x, 0, len(dp) - 1)
+            if dp[n] < x:
+                dp.append(x)
+            else:
+                dp[n] = x
+        return len(dp)
+
+    def bs(self, arr, x, start, end):
+        if start == end:
+            return start
+        pivot = (start + end) // 2
+        if arr[pivot] == x:
+            return pivot
+        if x < arr[pivot]:
+            return self.bs(arr, x, start, pivot)
+        else:
+            return self.bs(arr, x, pivot + 1, end)
 
 
 # @lc code=end
