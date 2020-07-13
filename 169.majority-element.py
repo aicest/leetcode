@@ -7,36 +7,17 @@
 # @lc code=start
 class Solution:
     def majorityElement(self, nums):
-        return self.dac(nums, 0, len(nums) - 1)
-
-    def dac(self, nums, start, end):
-        if start == end:
-            return nums[start]
-        pivot = (start + end) // 2
-        left = self.dac(nums, start, pivot)
-        right = self.dac(nums, pivot + 1, end)
-        if left == None:
-            return right
-        if right == None:
-            return left
-        if left == right:
-            return left
-        leftCount, rightCount = self.count(nums, start, end, left, right)
-        if leftCount > rightCount:
-            return left
-        elif leftCount < rightCount:
-            return right
-        else:
-            return None
-
-    def count(self, nums, start, end, left, right):
-        leftCount = rightCount = 0
-        for i in range(start, end + 1):
-            if nums[i] == left:
-                leftCount += 1
-            elif nums[i] == right:
-                rightCount += 1
-        return leftCount, rightCount
+        # https://zh.wikipedia.org/wiki/%E5%A4%9A%E6%95%B0%E6%8A%95%E7%A5%A8%E7%AE%97%E6%B3%95
+        m = None
+        i = 0
+        for x in nums:
+            if i == 0:
+                m = x
+            if m == x:
+                i += 1
+            else:
+                i -= 1
+        return m
 
 
 # @lc code=end
