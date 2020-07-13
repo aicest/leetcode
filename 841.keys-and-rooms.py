@@ -7,13 +7,14 @@
 # @lc code=start
 class Solution:
     def canVisitAllRooms(self, rooms):
-        return len(self.dfs(rooms, 0, [0])) == len(rooms)
-
-    def dfs(self, rooms, i, path):
-        for key in rooms[i]:
-            if key not in path:
-                path = self.dfs(rooms, key, path + [key])
-        return path
+        path = [False] * len(rooms)
+        keys = [0]
+        while keys:
+            key = keys.pop()
+            if not path[key]:
+                path[key] = True
+                keys.extend(rooms[key])
+        return all(path)
 
 
 # @lc code=end
