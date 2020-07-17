@@ -7,14 +7,13 @@
 # @lc code=start
 class Solution:
     def subsets(self, nums):
-        result = []
-        for i in range(1 << len(nums)):
-            path = []
-            for j in range(len(nums)):
-                if i & 1 << j:
-                    path.append(nums[j])
-            if path not in result:
-                result.append(path)
+        # DPi = DPi-1 + DPi-1 * Ai
+        result = [[]]
+        for a in nums:
+            for i in range(len(result)):
+                path = result[i] + [a]
+                if path not in result:
+                    result.append(path)
         return result
 
 
