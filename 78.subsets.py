@@ -7,18 +7,14 @@
 # @lc code=start
 class Solution:
     def subsets(self, nums):
-        return self.dfs(nums, 0, len(nums) - 1, [], {})
-
-    def dfs(self, nums, start, end, path, dp):
-        result = [path]
-        for i in range(start, end + 1):
-            curr = path + [nums[i]]
-            if (i + 1, end) not in dp:
-                dp[(i + 1, end)] = self.dfs(nums, i + 1, end, [], dp)
-            for cp in dp[(i + 1, end)]:
-                cp = curr + cp
-                if cp not in result:
-                    result.append(cp)
+        result = []
+        for i in range(1 << len(nums)):
+            path = []
+            for j in range(len(nums)):
+                if i & 1 << j:
+                    path.append(nums[j])
+            if path not in result:
+                result.append(path)
         return result
 
 
