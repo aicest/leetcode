@@ -7,21 +7,17 @@
 # @lc code=start
 class Solution:
     def findSubsequences(self, nums):
-        result = []
-        found = {}
-        n = len(nums)
-        for i in range(1 << n):
-            path = []
-            for j in range(n):
-                if i & 1 << j:
-                    prev = path[-1] if path else None
-                    if prev == None or prev <= nums[j]:
-                        path.append(nums[j])
-                    else:
-                        break
-            if len(path) >= 2 and tuple(path) not in found:
-                result.append(path)
-                found[tuple(path)] = True
+        return self.dfs(nums, 0, len(nums) - 1, [])
+
+    def dfs(self, nums, start, end, path, root=None, result=None, found=None):
+        result = [] if result == None else result
+        found = {} if found == None else found
+        if len(path) >= 2 and tuple(path) not in found:
+            result.append(path)
+            found[tuple(path)] = True
+        for i in range(start, end + 1):
+            if root == None or root <= nums[i]:
+                self.dfs(nums, i + 1, end, path + [nums[i]], nums[i], result, found)
         return result
 
 
