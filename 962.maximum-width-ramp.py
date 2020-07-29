@@ -8,26 +8,22 @@
 class Solution:
     def maxWidthRamp(self, A):
         best = 0
-        arr = [(0, A[0])]
+        stack = [(0, A[0])]
         for i in range(1, len(A)):
             a = A[i]
-            if arr[-1][1] > a:
-                arr.append((i, a))
+            if stack[-1][1] > a:
+                stack.append((i, a))
+        for j in range(len(A) - 1, -1, -1):
+            b = A[j]
+            while stack:
+                if stack[-1][1] <= b:
+                    i, a = stack.pop()
+                    best = max(best, j - i)
+                else:
+                    break
             else:
-                j, b = self.bs(arr, 0, len(arr), a)
-                best = max(best, i - j)
+                break
         return best
-
-    def bs(self, arr, start, end, target):
-        if start == end:
-            return arr[start]
-        pivot = (start + end) // 2
-        if target == arr[pivot][1]:
-            return arr[pivot]
-        elif target < arr[pivot][1]:
-            return self.bs(arr, pivot + 1, end, target)
-        else:
-            return self.bs(arr, start, pivot, target)
 
 
 # @lc code=end
@@ -39,6 +35,7 @@ if __name__ == "__main__":
     print(4, Solution().maxWidthRamp([6, 0, 8, 2, 1, 5]))
     print(7, Solution().maxWidthRamp([9, 8, 1, 0, 1, 9, 4, 0, 4, 1]))
     print(3, Solution().maxWidthRamp([3, 0, 2, 2, 1]))
+    print(5, Solution().maxWidthRamp([3, 2, 0, 2, 2, 4, 1]))
     print(1, Solution().maxWidthRamp(list(range(50000, 1, -1)) + [2]))
     print(49998, Solution().maxWidthRamp(list(range(1, 50000))))
     end = time.perf_counter()
