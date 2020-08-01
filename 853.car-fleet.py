@@ -6,24 +6,15 @@
 
 # @lc code=start
 class Solution:
-    def carFleet(self, target, positionList, speedList):
-        carList = sorted(zip(positionList, speedList), key=lambda c: c[1])
+    def carFleet(self, target, P, S):
+        # 核心：位置靠后的车辆，赶上前车后则同速行进，速度再怎么快也不会越过前车直奔终点
         count = 0
-        n = len(carList)
-        while n != 0:
-            count += 1
-            n -= 1
-            p0, s0 = carList.pop(0)
-            t0 = (target - p0) / s0
-            i = 0
-            while i < n:
-                p1, s1 = c1 = carList[i]
-                t1 = (p0 - p1) / (s1 - s0) if p0 >= p1 and s1 > s0 else float("inf")
-                if t1 <= t0:
-                    carList.remove(c1)
-                    n -= 1
-                else:
-                    i += 1
+        leadingCarTime = float("-inf")
+        for p, s in sorted(zip(P, S), key=lambda c: c[0], reverse=True):
+            t = (target - p) / s
+            if t > leadingCarTime:
+                count += 1
+                leadingCarTime = t
         return count
 
 
