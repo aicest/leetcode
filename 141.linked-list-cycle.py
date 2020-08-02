@@ -9,12 +9,13 @@ from __ListNode import *
 # @lc code=start
 class Solution:
     def hasCycle(self, head):
-        found = {}
-        while head:
-            if head in found:
+        slow = head
+        fast = slow.next if slow else None
+        while slow and fast:
+            if slow == fast:
                 return True
-            found[head] = True
-            head = head.next
+            slow = slow.next
+            fast = fast.next.next if fast.next else None
         return False
 
 
@@ -40,4 +41,5 @@ if __name__ == "__main__":
     print(Solution().hasCycle(create([3, 2, 0, -4], 1)))
     print(Solution().hasCycle(create([1, 2], 0)))
     print(Solution().hasCycle(create([1], -1)))
+    print(Solution().hasCycle(create([1], 0)))
     print(Solution().hasCycle(create([1, 2, 3, 2, 1], -1)))
