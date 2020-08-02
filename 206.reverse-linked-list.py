@@ -7,9 +7,13 @@
 # @lc code=start
 class Solution:
     def reverseList(self, head):
-        if not head:
-            return None
-        return self.traverse(head)[0]
+        tail = None
+        while head:
+            node = head
+            head = head.next
+            node.next = tail
+            tail = node
+        return tail
 
     def traverse(self, node):
         if not node.next:
