@@ -14,9 +14,7 @@ class Solution:
         k = k % n if n != 0 else 0
         if k == 0:
             return
-        copy = nums.copy()
-        for i in range(n):
-            nums[i] = copy[((n + i) - k) % n]
+        nums[:] = nums[n - k :] + nums[0 : n - k]
 
 
 # @lc code=end
