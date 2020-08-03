@@ -8,61 +8,28 @@
 class Solution:
     def threeSum(self, nums):
         result = set()
-        nums = self.ms(nums)
+        nums.sort()
         n = len(nums)
         i = 0
         while i < n - 2:
             a = nums[i]
             if a > 0:
                 break
-            j = i + 1
-            while j < n - 1:
-                b = nums[j]
-                if a + b > 0:
-                    break
-                c = 0 - (a + b)
-                k = self.bs(nums, j + 1, n - 1, c)
-                if nums[k] == c:
+            if i - 1 >= 0 and nums[i - 1] == nums[i]:
+                i += 1
+                continue
+            ht = {}
+            ht[nums[i + 1]] = True
+            k = i + 2
+            while k < n:
+                c = nums[k]
+                b = 0 - (a + c)
+                if b in ht:
                     result.add((a, b, c))
-                j += 1
+                ht[c] = True
+                k += 1
             i += 1
         return list(map(lambda item: list(item), result))
-
-    def bs(self, arr, start, end, target):
-        if start == end:
-            return start
-        pivot = (start + end) // 2
-        if arr[pivot] == target:
-            return pivot
-        if arr[pivot] > target:
-            return self.bs(arr, start, pivot, target)
-        else:
-            return self.bs(arr, pivot + 1, end, target)
-
-    def ms(self, arr):
-        n = len(arr)
-        if n <= 1:
-            return arr
-        pivot = (n - 1) // 2
-        return self.m(self.ms(arr[0 : pivot + 1]), self.ms(arr[pivot + 1 :]))
-
-    def m(self, left, right):
-        arr = []
-        m, n = len(left), len(right)
-        i = j = 0
-        while i < m and j < n:
-            a, b = left[i], right[j]
-            if a <= b:
-                arr.append(a)
-                i += 1
-            else:
-                arr.append(b)
-                j += 1
-        if i < m:
-            arr.extend(left[i:])
-        if j < n:
-            arr.extend(right[j:])
-        return arr
 
 
 # @lc code=end
@@ -71,6 +38,7 @@ if __name__ == "__main__":
     import time
 
     start = time.perf_counter()
+    print([[-2, -2, 4]] == Solution().threeSum([-2, -2, -1, 4]))
     print([[-1, 0, 1], [-1, -1, 2]] == Solution().threeSum([-1, 0, 1, 2, -1, -4]))
     # fmt: off
     Solution().threeSum([-12, 12, -5, -4, -12, 11, 9, -11, 13, 1, 12, -1, 8, 1, -9, -11, -13, -4, 10, -9, -6, -11, 1, -15, -3, 4, 0, -15, 3, 6, -4, 7, 3, -2, 10, -2, -6, 4, 2, -7, 12, -1, 7, 6, 7, 6, 2, 10, -13, -3, 8, -12, 2, -5, -12, 6, 6, -5, 6, -5, -14, 9, 9, -4, -8, 4, 2, -7, -15, -11, -7, 12, -4, 8, -5, -12, -1, 12, 5, 1, -5, -1, 5, 12, 9, 0, 3, 0, 3, -14, 2, -4, 2, -4, 0, 1, 7, -13, 9, -1, 13, -12, -11, -6, 11, -1, -10, -5, -3, 10, 3, 7, -6, -15, -4, 10, 1, 14, -12])
