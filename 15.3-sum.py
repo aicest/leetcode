@@ -18,16 +18,18 @@ class Solution:
             if i - 1 >= 0 and nums[i - 1] == nums[i]:
                 i += 1
                 continue
-            ht = {}
-            ht[nums[i + 1]] = True
-            k = i + 2
-            while k < n:
-                c = nums[k]
-                b = 0 - (a + c)
-                if b in ht:
+            j, k = i + 1, n - 1
+            while j < k:
+                b, c = nums[j], nums[k]
+                acc = a + b + c
+                if acc < 0:
+                    j += 1
+                elif acc > 0:
+                    k -= 1
+                else:
                     result.add((a, b, c))
-                ht[c] = True
-                k += 1
+                    j += 1
+                    k -= 1
             i += 1
         return list(map(lambda item: list(item), result))
 
