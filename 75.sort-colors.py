@@ -12,25 +12,36 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        i, j, k = 0, 0, len(nums) - 1
-        while j <= k:
-            if nums[j] == 0:
-                if i != j:
-                    nums[i], nums[j] = nums[j], nums[i]
-                i, j = i + 1, j + 1
-            elif nums[k] == 2:
-                k -= 1
-            elif nums[j] == nums[k]:
-                if j != k:
-                    nums[j + 1], nums[k] = nums[k], nums[j + 1]
-                j += 2
+        self.qs(nums, 0, len(nums) - 1)
+
+    def qs(self, nums, start, end):
+        i, j = start + 1, end
+        while True:
+            while i <= j and nums[i] < nums[start]:
+                i += 1
+            while i <= j and nums[j] >= nums[start]:
+                j -= 1
+            if i < j:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+                j -= 1
             else:
-                nums[j], nums[k] = nums[k], nums[j]
+                break
+        if start != j:
+            nums[start], nums[j] = nums[j], nums[start]
+        if start < j - 1:
+            self.qs(nums, start, j - 1)
+        if j + 1 < end:
+            self.qs(nums, j + 1, end)
 
 
 # @lc code=end
 
 if __name__ == "__main__":
+    Solution().sortColors(nums := [2, 1, 3])
+    print(sorted(nums) == nums)
+    Solution().sortColors(nums := [2, 3, 1])
+    print(sorted(nums) == nums)
     Solution().sortColors(nums := [2, 0, 2, 1, 1, 0])
     print(sorted(nums) == nums)
     Solution().sortColors(nums := [1, 0, 1])
