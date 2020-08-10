@@ -6,30 +6,42 @@
 
 # @lc code=start
 class LRUCache:
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.used = 0
-        self.queue = []
+    def __init__(self, quota: int):
+        self.quota, self.used = quota, 0
         self.map = {}
+        self.head, self.tail = "^", "$"
+        self.next, self.prev = {}, {}
+        self.next[self.head], self.prev[self.tail] = self.tail, self.head
+
+    def __remove(self, key):
+        self.next[self.prev[key]] = self.next[key]
+        self.prev[self.next[key]] = self.prev[key]
+        self.next.pop(key)
+        self.prev.pop(key)
+
+    def __insert(self, prev, key):
+        self.next[prev], self.next[key] = key, self.next[prev]
+        self.prev[key], self.prev[self.next[key]] = prev, key
 
     def get(self, key: int) -> int:
         if key not in self.map:
             return -1
-        self.queue.remove(key)
-        self.queue.insert(0, key)
+        self.__remove(key)
+        self.__insert(self.head, key)
         return self.map[key]
 
     def put(self, key: int, value: int) -> None:
         if key in self.map:
-            self.queue.remove(key)
+            self.__remove(key)
             self.used -= 1
-        if self.used == self.capacity:
-            least = self.queue.pop()
+        if self.used == self.quota:
+            least = self.prev[self.tail]
+            self.__remove(least)
             self.map.pop(least)
-        else:
-            self.used += 1
-        self.queue.insert(0, key)
+            self.used -= 1
+        self.__insert(self.head, key)
         self.map[key] = value
+        self.used += 1
 
 
 # @lc code=end
