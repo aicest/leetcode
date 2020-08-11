@@ -11,7 +11,23 @@ from __TreeNode import *
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
         # 左 -> 根 -> 右
-        return self.recursive(root)
+        #   1
+        #  / \
+        # 2   3
+        # |\  |\
+        # 4 5 6 7
+        result = []
+        stack = []  # pending
+        node = root
+        while node or stack:
+            if node:
+                stack.append(node)  # d. push 5 | h. push 3 | i. push 6
+                node = node.left
+            else:
+                node = stack.pop()  # a. pop 4 | b. pop 2 | e. pop 5 | f. pop 1
+                result.append(node.val)
+                node = node.right  # c. move 5 | g. move 3
+        return result
 
     def recursive(self, node):
         result = []
@@ -29,3 +45,4 @@ if __name__ == "__main__":
     print([] == Solution().inorderTraversal(create([])))
     print([1] == Solution().inorderTraversal(create([1])))
     print([1, 3, 2] == Solution().inorderTraversal(create([1, None, 2, 3])))
+    print([4, 2, 5, 1, 6, 3] == Solution().inorderTraversal(create(list(range(1, 7)))))
