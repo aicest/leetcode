@@ -9,7 +9,15 @@ from typing import *
 # @lc code=start
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        return self.dfs(["(", ")"], "", n * 2)
+        # F[n] = dedup(sum{2*(n-1)+1, 2*(n-2)+1, ..., 2*1+1, 2*0+1})
+        prev, portion = {"": True}, "()"
+        for i in range(n):
+            curr = {}
+            for path in prev.keys():
+                for k in range(2 * i + 1):
+                    curr[path[0:k] + portion + path[k:]] = True
+            prev = curr
+        return list(prev)
 
     def dfs(self, parentheses, path, target):
         stack = []
@@ -34,10 +42,10 @@ if __name__ == "__main__":
     start = time.perf_counter()
     print([""] == Solution().generateParenthesis(0))
     print(["()"] == Solution().generateParenthesis(1))
-    print(["(())", "()()"] == Solution().generateParenthesis(2))
+    print(["(())", "()()"] == sorted(Solution().generateParenthesis(2)))
     # fmt: off
-    print(["((()))", "(()())", "(())()", "()(())", "()()()"] == Solution().generateParenthesis(3))
-    print(["(((())))", "((()()))", "((())())", "((()))()", "(()(()))", "(()()())", "(()())()", "(())(())", "(())()()", "()((()))", "()(()())", "()(())()", "()()(())", "()()()()"] == Solution().generateParenthesis(4))
+    print(["((()))", "(()())", "(())()", "()(())", "()()()"] == sorted(Solution().generateParenthesis(3)))
+    print(["(((())))", "((()()))", "((())())", "((()))()", "(()(()))", "(()()())", "(()())()", "(())(())", "(())()()", "()((()))", "()(()())", "()(())()", "()()(())", "()()()()"] == sorted(Solution().generateParenthesis(4)))
     # fmt: on
     Solution().generateParenthesis(5)
     Solution().generateParenthesis(6)
