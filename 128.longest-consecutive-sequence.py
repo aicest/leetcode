@@ -9,6 +9,23 @@ from typing import *
 # @lc code=start
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
+        pool = set(nums)
+        best = 0
+        while pool:
+            x, count = pool.pop(), 0
+            while x - 1 in pool:
+                pool.remove(x - 1)
+                x, count = x - 1, count + 1
+            x = x + count
+            while x + 1 in pool:
+                pool.remove(x + 1)
+                x, count = x + 1, count + 1
+            best = max(best, count + 1)
+            if best >= len(pool):
+                return best
+        return best
+
+    def uf(self, nums):
         best = 0
         tree = {}
         for x in nums:
