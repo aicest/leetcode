@@ -9,6 +9,23 @@ from typing import *
 # @lc code=start
 class Solution:
     def calculateMinimumHP(self, dungeon: List[List[int]]) -> int:
+        # 核心：从后往前，只能抵挡往后伤害，多余 HP 无用
+        # F[m][n] = min(0, max(F[m+1][n], F[m][n+1]) + D[m][n])
+        m, n = len(dungeon), len(dungeon[0]) if dungeon else 0
+        dp = [0] * (n + 1)
+        for i in reversed(range(m)):
+            for j in reversed(range(n)):
+                if i == m - 1 and j == n - 1:
+                    dp[j] = min(0, dungeon[i][j])
+                elif i == m - 1:
+                    dp[j] = min(0, dp[j + 1] + dungeon[i][j])
+                elif j == n - 1:
+                    dp[j] = min(0, dp[j] + dungeon[i][j])
+                else:
+                    dp[j] = min(0, max(dp[j], dp[j + 1]) + dungeon[i][j])
+        return 1 - min(0, dp[0])
+
+    def v1(self, dungeon):
         # F[m][n] = {F[m-1][n]+D[m][n], F[m][n-1]+D[m][n]}, HP[i][j] >= min{HP}
         dp = []
         for i in range(len(dungeon)):
@@ -34,6 +51,8 @@ if __name__ == "__main__":
     import time
 
     start = time.perf_counter()
+    print(1 == Solution().calculateMinimumHP([]))
+    print(1 == Solution().calculateMinimumHP([[]]))
     print(2 == Solution().calculateMinimumHP([[-1]]))
     print(1 == Solution().calculateMinimumHP([[3]]))
     print(4 == Solution().calculateMinimumHP([[-1, -2]]))
