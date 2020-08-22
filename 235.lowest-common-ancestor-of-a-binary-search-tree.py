@@ -11,20 +11,18 @@ class Solution:
     def lowestCommonAncestor(
         self, root: "TreeNode", p: "TreeNode", q: "TreeNode"
     ) -> "TreeNode":
-        A, B = self.dfs(root, p, []), self.dfs(root, q, [])
-        i, n = 0, min(len(A), len(B))
-        while i < n and A[i] == B[i]:
-            i += 1
-        return A[i - 1]
+        p, q = (p, q) if p.val <= q.val else (q, p)
+        return self.bs(root, p, q)
 
-    def dfs(self, node, target, path):
+    def bs(self, node, p, q):
         if not node:
             return None
-        curr = path + [node]
-        result = curr if node.val == target.val else None
-        result = result or self.dfs(node.left, target, curr)
-        result = result or self.dfs(node.right, target, curr)
-        return result
+        if q.val < node.val:
+            return self.bs(node.left, p, q)
+        elif node.val < p.val:
+            return self.bs(node.right, p, q)
+        else:
+            return node
 
 
 # @lc code=end
@@ -35,3 +33,5 @@ if __name__ == "__main__":
     print(6 == Solution().lowestCommonAncestor(root, create([2]), create([8])).val)
     root = create([6, 2, 8, 0, 4, 7, 9, None, None, 3, 5])
     print(2 == Solution().lowestCommonAncestor(root, create([2]), create([4])).val)
+    root = create([2, 1])
+    print(2 == Solution().lowestCommonAncestor(root, create([2]), create([1])).val)
