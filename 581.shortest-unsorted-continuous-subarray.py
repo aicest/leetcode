@@ -9,6 +9,24 @@ from typing import *
 # @lc code=start
 class Solution:
     def findUnsortedSubarray(self, nums: List[int]) -> int:
+        # 核心：
+        # 1. 找到一个极小数，存在更大数，说明需要排序，记录位置
+        # 2. 继续查找，发现更小数，取其为极小数，但不用记录位置
+        low, high = float("inf"), float("-inf")
+        lowIndex, highIndex = 0, -1
+        for i in reversed(range(len(nums))):
+            if nums[i] > low:
+                lowIndex = i
+            else:
+                low = nums[i]
+        for i in range(len(nums)):
+            if nums[i] < high:
+                highIndex = i
+            else:
+                high = nums[i]
+        return highIndex + 1 - lowIndex
+
+    def v1(self, nums):
         asc = []
         n = len(nums)
         for i in range(n):
