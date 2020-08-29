@@ -5,8 +5,24 @@
 #
 
 # @lc code=start
+import math
+
+
 class Solution:
     def countPrimes(self, n: int) -> int:
+        if n <= 2:
+            return 0
+        ht = [1] * n
+        count = n >> 1
+        for i in range(3, math.ceil(n ** 0.5), 2):
+            if ht[i] == 1:
+                for j in range(i, (n + i - 1) // i, 2):
+                    if ht[i * j] == 1:
+                        count -= 1
+                    ht[i * j] = 0
+        return count
+
+    def v1(self, n):
         if n <= 1:
             return 0
         ht = [1] * n
