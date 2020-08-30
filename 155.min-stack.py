@@ -7,41 +7,20 @@
 # @lc code=start
 class MinStack:
     def __init__(self):
+        self.arr = []
         self.min = [float("inf")]
-        self.node, self.prev, self.next = {}, {}, {}
-        self.id, self.head, self.tail = -1, "^", "$"
-        self.prev[self.tail] = self.head
-        self.next[self.head] = self.tail
 
-    def __remove(self, key):
-        self.node.pop(key)
-        self.prev[self.next[key]] = self.prev[key]
-        self.next[self.prev[key]] = self.next[key]
-        self.prev.pop(key)
-        self.next.pop(key)
-
-    def __insert(self, prev, value):
-        key = self.id = self.id + 1
-        self.node[key] = value
-        self.prev[key] = prev
-        self.next[key] = self.next[prev]
-        self.prev[self.next[prev]] = key
-        self.next[prev] = key
-
-    def push(self, value: int) -> None:
-        self.__insert(self.prev[self.tail], value)
-        if value <= self.min[-1]:
-            self.min.append(value)
+    def push(self, x: int) -> None:
+        self.arr.append(x)
+        if x <= self.min[-1]:
+            self.min.append(x)
 
     def pop(self) -> None:
-        key = self.prev[self.tail]
-        value = self.node[key]
-        self.__remove(key)
-        if value == self.min[-1]:
+        if self.arr.pop() == self.min[-1]:
             self.min.pop()
 
     def top(self) -> int:
-        return self.node[self.prev[self.tail]]
+        return self.arr[-1]
 
     def getMin(self) -> int:
         return self.min[-1]
