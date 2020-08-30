@@ -9,7 +9,19 @@ from __TreeNode import *
 # @lc code=start
 class Solution:
     def maxDepth(self, root: TreeNode) -> int:
-        return self.dfs(root)
+        nodeList = [root] if root else []
+        count = 0
+        while nodeList:
+            count += 1
+            nextLevel = []
+            while nodeList:
+                node = nodeList.pop()
+                if node.left:
+                    nextLevel.append(node.left)
+                if node.right:
+                    nextLevel.append(node.right)
+            nodeList = nextLevel
+        return count
 
     def dfs(self, node):
         best = 0
