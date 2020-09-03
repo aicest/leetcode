@@ -9,16 +9,10 @@ from typing import *
 # @lc code=start
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
+        # 0 + 1 + 2 + ... + n-2 + n-1 + n = n * (n + 1) / 2 - x
         n = len(nums)
-        for i in range(n):
-            j = nums[i]
-            while j != i and j != n:
-                nums[i], nums[j] = nums[j], nums[i]
-                j = nums[i]
-        for i in range(n):
-            if nums[i] != i:
-                return i
-        return n
+        x = n * (n + 1) // 2 - sum(nums)
+        return x
 
 
 # @lc code=end
