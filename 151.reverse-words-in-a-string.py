@@ -7,6 +7,9 @@
 # @lc code=start
 class Solution:
     def reverseWords(self, s: str) -> str:
+        return " ".join(filter(bool, s.split(" ")[::-1]))
+
+    def v1(self, s):
         stack = []
         i, j, n = 0, 0, len(s)
         while j < n:
