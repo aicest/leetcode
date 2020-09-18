@@ -9,11 +9,35 @@ from typing import *
 # @lc code=start
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        indegree, outdegree = {}, {}
+        zero = set(range(numCourses))
+        for start, end in prerequisites:
+            if start in outdegree:
+                outdegree[start].append(end)
+            else:
+                outdegree[start] = [end]
+            if end in indegree:
+                indegree[end] = indegree[end] + 1
+            else:
+                indegree[end] = 1
+                zero.remove(end)
+        visited = [False] * numCourses
+        while zero:
+            start = zero.pop()
+            visited[start] = True
+            if start in outdegree:
+                for end in outdegree[start]:
+                    indegree[end] -= 1
+                    if indegree[end] == 0:
+                        zero.add(end)
+        return all(visited)
+
+    def v1(self, numCourses, prerequisites):
         ht = {}
-        for a, b in prerequisites:
-            if a not in ht:
-                ht[a] = []
-            ht[a].append(b)
+        for start, end in prerequisites:
+            if start not in ht:
+                ht[start] = []
+            ht[start].append(end)
         visited, pending = {}, {}
         for i in range(numCourses):
             if not self.dfs(i, ht, visited, pending):
