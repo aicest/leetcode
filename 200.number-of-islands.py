@@ -9,6 +9,29 @@ from typing import *
 # @lc code=start
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+        count = 0
+        m, n = len(grid), len(grid[0]) if grid else 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "1":
+                    count += 1
+                    self.dfs(grid, m, n, i, j)
+        return count
+
+    def dfs(self, grid, m, n, i, j):
+        if grid[i][j] != "1":
+            return
+        grid[i][j] = "-"
+        if i + 1 < m:
+            self.dfs(grid, m, n, i + 1, j)
+        if i - 1 >= 0:
+            self.dfs(grid, m, n, i - 1, j)
+        if j + 1 < n:
+            self.dfs(grid, m, n, i, j + 1)
+        if j - 1 >= 0:
+            self.dfs(grid, m, n, i, j - 1)
+
+    def v1(self, grid):
         result = set()
         m, n = len(grid), len(grid[0]) if grid else 0
         for i in range(m):
