@@ -9,6 +9,19 @@ from __TreeNode import *
 # @lc code=start
 class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
+        stack = [(root, root)]
+        while stack:
+            left, right = stack.pop()
+            if not left and not right:
+                pass
+            elif not left or not right or left.val != right.val:
+                return False
+            else:
+                stack.append((left.left, right.right))
+                stack.append((left.right, right.left))
+        return True
+
+    def v2(self, root):
         if not root:
             return True
         return self.recursive(root.left, root.right)
