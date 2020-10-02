@@ -9,6 +9,17 @@ from typing import *
 # @lc code=start
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
+        count = 0
+        acc = 0
+        ht = {0: 1}
+        for x in nums:
+            acc += x
+            if acc - k in ht:
+                count += ht[acc - k]
+            ht[acc] = ht[acc] + 1 if acc in ht else 1
+        return count
+
+    def v1(self, nums, k):
         # F[n] = { ...F[n-1][i]+A[j] }
         count = 0
         dp = {}
@@ -27,7 +38,12 @@ class Solution:
 # @lc code=end
 
 if __name__ == "__main__":
+    print(0 == Solution().subarraySum([], 0))
+    print(1 == Solution().subarraySum([0], 0))
+    print(0 == Solution().subarraySum([0], 1))
     print(4 == Solution().subarraySum([1, -1, 1, 2, -2], 0))
+    print(0 == Solution().subarraySum([1, 1, 1], 0))
+    print(3 == Solution().subarraySum([1, 1, 1], 1))
     print(2 == Solution().subarraySum([1, 1, 1], 2))
     # fmt: off
     print(7 == Solution().subarraySum([1, 1, 1, 2, 6, 4, 4, 2, 3, 3, 2, 4, 5, 2, 4, 2, 2, 2, 2, 1, 1], 10))
